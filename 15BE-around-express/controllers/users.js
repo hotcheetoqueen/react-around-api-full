@@ -1,12 +1,19 @@
 const User = require('../models/user');
+const { isAuthorized } = require('../utils/jwt');
+
 
 module.exports.getAllUsers = (req, res) => {
+  if (isAuthorized(req.headers.authorization)) return res.status(401);
+
   User.find({ })
     .then((users) => res.send({ data: users }))
     .catch(() => res.status(500).send({ message: 'Sorry, our server is sad' }));
 };
 
 module.exports.getProfile = (req, res) => {
+  if (isAuthorized(req.headers.authorization)) return res.status(401);
+
+
   User.findById(req.params.id)
     .then((user) => {
       if (user) {
