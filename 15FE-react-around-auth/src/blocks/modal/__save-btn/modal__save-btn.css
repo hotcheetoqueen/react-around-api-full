@@ -1,0 +1,52 @@
+/* @import url('./_disabled/modal__save-btn_disabled.css'); */
+@import url('./_credentials/modal__save-btn_credentials.css');
+@import url('./_removed/modal__save-btn_removed.css');
+
+.modal__save-btn {
+    margin: 48px 36px 36.5px;
+    width: 358px;
+    height: 50.15px;
+    background: #000000;
+    color: #ffffff;
+    border: 0;
+    border-radius: 2px;
+    padding: 0;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+}
+
+.modal__save-btn:hover {
+    background: rgba(0, 0, 0, .8);
+    cursor: pointer;
+}
+
+.modal__save-btn:focus {
+    outline: none;
+}
+
+.modal__save-btn_disabled {
+    color: rgba(0, 0, 0, .2);
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, .2);
+    box-sizing: border-box;
+    border-radius: 2px;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.modal__save-btn_disabled:hover {
+    cursor: default;
+    background: none;
+}
+
+@media screen and (max-width: 320px) {
+    .modal__save-btn {
+        width: 205px;
+        height: 40px;
+    }
+}
+

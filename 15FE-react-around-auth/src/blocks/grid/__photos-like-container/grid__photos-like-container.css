@@ -1,0 +1,5 @@
+.grid__photos-like-container {
+    display: flex;
+    flex-direction: column;
+    margin: 22px 15px 0px auto;
+}

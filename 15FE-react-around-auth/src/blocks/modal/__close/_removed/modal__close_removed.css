@@ -1,0 +1,5 @@
+/* TO DO hide modal close button */
+
+.modal__close_removed {
+    display: none;
+}

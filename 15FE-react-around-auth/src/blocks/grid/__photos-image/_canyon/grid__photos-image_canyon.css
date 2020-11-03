@@ -1,0 +1,6 @@
+.grid__photos-image_canyon {
+    background-image: url('../../../../images/Grand_Canyon.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-y: center;
+}

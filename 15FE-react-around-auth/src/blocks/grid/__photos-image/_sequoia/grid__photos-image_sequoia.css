@@ -1,0 +1,6 @@
+.grid__photos-image_sequoia {
+    background-image: url('../../../../images/Seqouia.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-y: center;
+}

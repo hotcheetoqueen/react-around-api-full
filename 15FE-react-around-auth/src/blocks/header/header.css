@@ -1,0 +1,21 @@
+@import url('./__logo/header__logo.css');
+@import url('./__nav-email/header__nav-email.css');
+@import url('./__nav-logout/header__nav-logout.css');
+@import url('./__nav/header__nav.css');
+
+.header {
+    border-bottom: 1px solid rgba(70, 70, 70, .7);
+    padding-bottom: 40px;
+    width: 882px;
+    margin: 0 199px;
+    display: flex;
+    justify-content: space-between;
+}
+
+@media screen and (max-width: 320px) {
+    .header {
+        width: 320px;
+        padding-bottom: 32px;
+        margin: 0;
+    }
+}

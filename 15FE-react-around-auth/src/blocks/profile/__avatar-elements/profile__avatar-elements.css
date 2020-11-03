@@ -1,0 +1,8 @@
+.profile__avatar-elements {
+    position: relative;
+    display: inline-block;
+}
+
+.profile__avatar-elements:hover .profile__avatar-button {
+    display: block;
+}

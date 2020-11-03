@@ -1,0 +1,13 @@
+.grid__photos-caption {
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 29px;
+    width: 220px;
+    color: #000000;
+    align-self: center;
+    margin-left: 21px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    outline: none;
+}
