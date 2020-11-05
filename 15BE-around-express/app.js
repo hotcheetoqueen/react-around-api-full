@@ -1,5 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cardsRoute = require('./routes/cards');
 const usersRoute = require('./routes/users');
 const adminRoute = require('./routes/admins');
@@ -23,9 +24,19 @@ app.use((req, res, next) => {
 app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
+app.use(requestLogger);
+
 app.use('/cards', cardsRoute);
 app.use('/users', usersRoute);
 app.use('/', adminRoute);
+
+app.use(errorLogger);
+// app.use(errors());
+
+// centralized error handler
+// app.use((err, req, res, next) => {
+  // ...
+// });
 
 app.get('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
