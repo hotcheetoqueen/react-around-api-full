@@ -2,6 +2,7 @@ const express = require('express');
 const mongoose = require('mongoose');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('cors');
+const validator = require('validator');
 
 const cardsRoute = require('./routes/cards');
 const usersRoute = require('./routes/users');
@@ -12,6 +13,8 @@ const { PORT = 3000 } = process.env;
 
 app.use(cors());
 app.options('*', cors());
+
+app.use(validator);
 
 mongoose.connect('mongodb://localhost:27017/aroundb', {
   useNewUrlParser: true,
