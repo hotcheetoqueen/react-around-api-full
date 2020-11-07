@@ -5,7 +5,7 @@ const { isAuthorized } = require('../utils/jwt');
 module.exports.getAllUsers = (req, res) => {
   if (isAuthorized(req.headers.authorization)) return res.status(401);
 
-  User.find({ })
+  User.find({ }).select('+password')
     .then((users) => res.send({ data: users }))
     .catch(() => res.status(500).send({ message: 'Sorry, our server is sad' }));
 };
@@ -14,7 +14,7 @@ module.exports.getProfile = (req, res) => {
   if (isAuthorized(req.headers.authorization)) return res.status(401);
 
 
-  User.findById(req.params.id)
+  User.findById(req.params.id).select('+password')
     .then((user) => {
       if (user) {
         res.send({ data: user });
@@ -34,7 +34,7 @@ module.exports.getProfile = (req, res) => {
 module.exports.createUser = (req, res) => {
   const { name, about, avatar, email, password } = req.body;
 
-  User.create({ name, about, avatar, email, password })
+  User.create({ name, about, avatar, email, password }).select('+password')
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -47,7 +47,7 @@ module.exports.createUser = (req, res) => {
 
 module.exports.updateUser = (req, res) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about })
+  User.findByIdAndUpdate(req.user._id, { name, about }).select('+password')
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -60,7 +60,7 @@ module.exports.updateUser = (req, res) => {
 
 module.exports.updateAvatar = (req, res) => {
   const { avatar } = req.body;
-  User.findByIdAndUpdate(req.user._id, { avatar })
+  User.findByIdAndUpdate(req.user._id, { avatar }).select('+password')
     .then((user) => res.send({ data: user }))
     .catch((err) => {
       if (err.name === 'ValidationError') {

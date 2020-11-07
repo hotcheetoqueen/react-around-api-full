@@ -10,7 +10,7 @@ const registerAdmin= (req, res) => {
   if (!email || !password) return res.status(400).send({ message: 'Uh oh, something is wrong with those credentials!'});
 
   return bcrypt.hash(password, SALT_ROUND, (err, hash) => {
-    return Admin.findOne({ email })
+    return Admin.findOne({ email }).select('+password')
       .then(admin => {
         if (admin) return res.status(403).send({message: 'This email already exists'});
 
@@ -29,7 +29,7 @@ const authorizeAdmin = (req, res) => {
 
   if (!email || !password) return res.status(400).send({ message: 'Uh oh, something is wrong with those credentials!'});
 
-  return Admin.findOne({ email })
+  return Admin.findOne({ email }).select('+password')
     .then(admin => {
       if (!admin) return res.status(403).send({ message: 'Hmm, this user does not exist' });
 
