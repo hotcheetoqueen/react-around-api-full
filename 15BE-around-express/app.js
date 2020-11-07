@@ -1,12 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const cors = require('cors');
+
 const cardsRoute = require('./routes/cards');
 const usersRoute = require('./routes/users');
 const adminRoute = require('./routes/admins');
 
 const app = express();
 const { PORT = 3000 } = process.env;
+
+app.use(cors());
+app.options('*', cors());
 
 mongoose.connect('mongodb://localhost:27017/aroundb', {
   useNewUrlParser: true,
@@ -26,9 +31,17 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(requestLogger);
 
+
+// app.get('/crash-test', () => {
+//   setTimeout(() => {
+//     throw new Error('Server will crash now');
+//   }, 0);
+// });
+
 app.use('/cards', cardsRoute);
 app.use('/users', usersRoute);
 app.use('/', adminRoute);
+
 
 app.use(errorLogger);
 // app.use(errors());
