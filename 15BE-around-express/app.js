@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('cors');
 const validator = require('validator');
+const auth = require('./utils/jwt');
 
 const cardsRoute = require('./routes/cards');
 const usersRoute = require('./routes/users');
@@ -34,8 +35,8 @@ app.use(requestLogger);
 //   }, 0);
 // });
 
-app.use('/cards', cardsRoute);
-app.use('/users', usersRoute);
+app.use('/cards', auth, cardsRoute);
+app.use('/users', auth, usersRoute);
 app.use('/', adminRoute);
 
 
