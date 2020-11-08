@@ -86,7 +86,7 @@ export const api = new Api({
     // server: "https://around.nomoreparties.co/v1/group-2",
     server: "https://api.hcq.students.nomoreparties.site",
     headers: {
-        authorization: "7c532e9d-132b-43e0-b1d4-55c21c0fd902",
+        "Authorization": "7c532e9d-132b-43e0-b1d4-55c21c0fd902",
         "Content-Type": "application/json",
     }
 });
