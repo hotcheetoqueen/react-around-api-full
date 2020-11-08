@@ -1,5 +1,5 @@
 
-export const BASE_URL = 'https://hcq.students.nomoreparties.site';
+export const BASE_URL = 'https://api.hcq.students.nomoreparties.site/';
 
 export const register = (identifier, password) => {
     return fetch(`${BASE_URL}/signup`, {
