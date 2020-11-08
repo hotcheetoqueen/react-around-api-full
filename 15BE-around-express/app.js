@@ -9,13 +9,15 @@ const cardsRoute = require('./routes/cards');
 const usersRoute = require('./routes/users');
 const adminRoute = require('./routes/admins');
 
+const ServerError = require('./errors/ServerError.js');
+
 const app = express();
 const { PORT = 3000 } = process.env;
 
 app.use(cors());
 app.options('*', cors());
 
-app.use(validator);
+// app.use(validator);
 
 mongoose.connect('mongodb://localhost:27017/aroundb', {
   useNewUrlParser: true,
@@ -43,10 +45,15 @@ app.use('/', adminRoute);
 app.use(errorLogger);
 // app.use(errors());
 
-// centralized error handler
-// app.use((err, req, res, next) => {
-  // ...
-// });
+app.use((err, req, res, next) => {
+  if (!err.statusCode) {
+    throw new ServerError('Hmmph, something is not right');
+  }
+
+  res.status(err.statusCode).send({ message: err.message })
+  .catch(next);
+})
+
 
 app.get('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });

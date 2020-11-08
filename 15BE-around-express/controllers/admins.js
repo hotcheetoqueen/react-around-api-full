@@ -31,16 +31,20 @@ const authorizeAdmin = (req, res) => {
 
   return Admin.findOne({ email }).select('+password')
     .then(admin => {
-      if (!admin) return res.status(403).send({ message: 'Hmm, this user does not exist' });
-
-      bcrypt.compare(password, admin.password, (err, isPasswordValid) => {
-        if(!isPasswordValid) return res.status(401).send({ message: 'Uh oh, something is off with those credentials!'})
-
+      if (!admin) {
+        throw new RequestError('Something is wrong with those credentials');
+    } else {
+      return bcrypt.compare(password, admin.password, (err, isPasswordValid) => {
+        if(!isPasswordValid) {
+          throw new RequestError('Something is wrong with those credentials');
+        }
+      })
         const token = generateJWT(admin.id);
 
         return res.status(200).send({ email });
-      })
-    })
+    }
+  })
+  .catch(next);
 }
 
 module.exports = { registerAdmin, authorizeAdmin };
