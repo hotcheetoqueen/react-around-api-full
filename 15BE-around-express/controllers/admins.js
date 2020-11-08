@@ -38,10 +38,10 @@ const authorizeAdmin = (req, res) => {
         if(!isPasswordValid) {
           throw new RequestError('Something is wrong with those credentials');
         }
-      })
         const token = generateJWT(admin.id);
 
         return res.status(200).send({ email });
+      })
     }
   })
   .catch(next);
