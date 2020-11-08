@@ -37,8 +37,8 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
-app.use('/cards', auth, cardsRoute);
-app.use('/users', auth, usersRoute);
+app.use('/cards', cardsRoute);
+app.use('/users', usersRoute);
 app.use('/', adminRoute);
 
 
