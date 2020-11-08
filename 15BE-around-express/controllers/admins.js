@@ -2,6 +2,7 @@ const Admin = require('../models/admin');
 const bcrypt = require('bcrypt');
 const SALT_ROUND = 10;
 const { generateJWT } = require('../utils/jwt');
+const RequestError = require('../errors/RequestError');
 
 const registerAdmin= (req, res) => {
   // req.body
