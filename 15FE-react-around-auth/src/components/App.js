@@ -200,7 +200,7 @@ function App(props) {
 
         auth.register(email, password)
             .then((res) => {
-            if (!res.data) {
+            if (!res) {
                 handleTooltip('failure');
                 throw new Error(`${res.message ? res.message : res.error}`);
               }})
