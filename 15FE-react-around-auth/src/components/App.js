@@ -33,9 +33,9 @@ function App(props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [message, setMessage] = React.useState('');
+  // const [token, setToken] = React.useState(localStorage.getItem('jwt'));
 
   const history = useHistory();
-
 
   function handleEditAvatarClick() {
       setIsEditAvatarPopupOpen(true);
@@ -224,9 +224,13 @@ function App(props) {
 
         auth.authorize(email, password)
         .then((data) => {
-            if (data){
+          if (data) {
+            // if (data && data.token) {
+            //     setToken(data.token);
+            //     localStorage.setItem('jwt', data.token);
                 handleLogin();
                 history.push('/home')
+
             } else {
                 resetForm();
                 if (!email || !password){
@@ -237,6 +241,9 @@ function App(props) {
                 }
           }
         })
+        // .then(() => {
+        //   // handleLogin();
+        // })
         // .then(() => {
         //     resetForm();
         // })

@@ -12,6 +12,15 @@ class Api {
         }).then(res => res.ok ? res.json() : Promise.reject('Error: ' + res.status))
     }
 
+//  getCardList(token) {
+        // return fetch(`${this.server}/cards`, {
+        //     headers: {
+            //     "Content-Type": "application/json",
+            //     "Authorization": `Bearer ${token}`
+    //     }).then(res => res.ok ? res.json() : Promise.reject('Error: ' + res.status))
+    // }
+
+
     getUserInfo() {
         return fetch(`${this.server}/users/me/`, {
             headers: this.headers,
