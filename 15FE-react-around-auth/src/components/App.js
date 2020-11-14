@@ -260,6 +260,7 @@ function App(props) {
             <div className="page">
               <div className="page__container">
                 <Header loggedIn={loggedIn} userEmail={userEmail} handleLogout={onLogout} />
+                <InfoTooltip isOpen={isTooltipOpen} onClose={closeAllPopups} feedback={tooltipFeedback} loggedIn={loggedIn} />
                     <Switch>
                       <Route exact path='/signin' >
                         <Login handleLogin={handleLogin} handleLoginSubmit={handleLoginSubmit} feedback={tooltipFeedback} handleLogout={onLogout} userEmail={userEmail} setUserEmail={setUserEmail} handleTooltip={handleTooltip} password={password}
@@ -269,7 +270,6 @@ function App(props) {
                         <Register handleRegisterSubmit={handleRegisterSubmit} registered={registered} handleLogin={handleLogin} userEmail={userEmail}
                           setUserEmail={setUserEmail} email={email} password={password}
                           setPassword={setPassword} handleTooltip={handleTooltip} feedback={tooltipFeedback} handleLogout={onLogout} />
-                        <InfoTooltip isOpen={isTooltipOpen} onClose={closeAllPopups} feedback={tooltipFeedback} loggedIn={loggedIn} />
                       </Route>
                       <Route exact path='/'>
                         {loggedIn ? <Redirect to="/home" /> : <Redirect to="/signin" />}
