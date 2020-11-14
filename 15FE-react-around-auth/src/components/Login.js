@@ -10,18 +10,11 @@ function Login({ loggedIn, handleLogin, userEmail, setUserEmail, handleLoginSubm
     const history = useHistory();
 
     React.useEffect(() => {
-        if (localStorage.getItem('jwt')) {
-            history.push('/home');
-            setUserEmail(email || userEmail);
-        }
-    }, [history, email, userEmail, setUserEmail]);
-
-    React.useEffect(() => {
         if (loggedIn) {
             history.push('/home');
             setUserEmail(email || userEmail);
         }
-    }, [history, email, loggedIn, userEmail, setUserEmail]);
+    }, [email, loggedIn, userEmail, setUserEmail]);
 
     
 
