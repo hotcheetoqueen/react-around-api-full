@@ -33,7 +33,7 @@ function App(props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [message, setMessage] = React.useState('');
-  // const [token, setToken] = React.useState(localStorage.getItem('jwt'));
+  const [token, setToken] = React.useState(localStorage.getItem('jwt'));
 
   const history = useHistory();
 
@@ -58,7 +58,7 @@ function App(props) {
   }
 
   function handleUpdateUserInfo({ name, about }) {
-      api.updateUserInfo({ name, about })
+      api.updateUserInfo({ name, about }, token)
         .then((res) => {
           setCurrentUser(res)
         })
@@ -71,7 +71,7 @@ function App(props) {
     }
 
   function handleUpdateAvatar({ avatar }) {
-      api.setUserAvatar(avatar.current.value)
+      api.setUserAvatar(avatar.current.value, token)
       .then((res) => {
           setCurrentUser(res);
         })
@@ -84,7 +84,7 @@ function App(props) {
   }
 
   function handleAddPlace({ caption, imageUrl }) {
-      api.addCard({ caption, imageUrl }).then((newCard) => {
+      api.addCard({ caption, imageUrl }, token).then((newCard) => {
         setCards([...cards, newCard]);
       })
       .then((res) => {
@@ -97,14 +97,14 @@ function App(props) {
 
     function handleCardLike(card) {
         const isLiked = card.likes.some((i) => i._id === currentUser._id);
-        api.toggleLike(card._id, isLiked).then((newCard) => {
+        api.toggleLike(card._id, isLiked, token).then((newCard) => {
           const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
           setCards(newCards);
         });
     }
 
     function handleCardDelete(card) {    
-        api.deleteCard(card._id).then(() => {
+        api.deleteCard(card._id, token).then(() => {
             setCards(cards.filter((c) => c._id !== card._id));
         })
         .then((res) => {
@@ -151,7 +151,7 @@ function App(props) {
   React.useEffect(() => {
 
     if (loggedIn) {
-      api.getUserInfo()
+      api.getUserInfo(token)
         .then((res) => {
           setCurrentUser(res);
       // setCurrentUser(res.owner._id);
@@ -169,7 +169,7 @@ function App(props) {
             console.log(err);
           });
         }
-      }, [loggedIn]);
+      }, [loggedIn, token]);
 
       const resetForm = (e) => {
         setEmail('')
@@ -178,10 +178,11 @@ function App(props) {
     }
 
     React.useEffect(() => {
-      const jwt = localStorage.getItem('jwt');
+      // you call this token with set state above, if uncomment remove this so it uses that variable
+      // const jwt = localStorage.getItem('jwt');
   
-      if (jwt) {
-        auth.getContent(jwt)
+      if (token) {
+        auth.getContent(token)
         .then((res) => {
           setLoggedIn(true);
           setUserEmail(res.data.email);
@@ -192,7 +193,7 @@ function App(props) {
       } else {
         setLoggedIn(false);
       }
-    }, [] );
+    }, [token] );
 
     const handleRegisterSubmit = (e) => {
         e.preventDefault();

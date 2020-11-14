@@ -25,7 +25,7 @@ const registerAdmin= (req, res) => {
 }
 
 
-const authorizeAdmin = (req, res) => {
+const authorizeAdmin = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) return res.status(400).send({ message: 'Uh oh, something is wrong with those credentials!'});
