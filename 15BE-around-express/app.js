@@ -4,7 +4,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('cors');
 const validator = require('validator');
 const auth = require('./utils/jwt');
-const { login, createUser } = require('../controllers/users');
+const { login, createUser } = require('./controllers/users');
 
 // const auth = require('./middlewares/auth');
 
