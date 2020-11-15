@@ -1,5 +1,7 @@
 
+// export const BASE_URL = 'http://localhost:3001';
 export const BASE_URL = 'https://api.hcq.students.nomoreparties.site';
+
 
 export const register = (identifier, password) => {
     return fetch(`${BASE_URL}/signup`, {
@@ -30,13 +32,12 @@ export const authorize = (email, password) => {
     .then((response => response.json()))
     .then((data) => {
         if (!data.message){
-            localStorage.setItem('jwt', data.token);
+            localStorage.setItem('token', data.token);
             return data;
         } else {
             return;
         }
     })
-    // .catch(err => console.log(err));
 }
 
 export const getContent = (token) => {

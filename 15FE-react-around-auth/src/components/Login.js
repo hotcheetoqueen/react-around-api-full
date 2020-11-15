@@ -9,14 +9,13 @@ function Login({ loggedIn, handleLogin, userEmail, setUserEmail, handleLoginSubm
 
     const history = useHistory();
 
+    // TODO email is not displayed when logged in
     React.useEffect(() => {
         if (loggedIn) {
             history.push('/home');
             setUserEmail(email || userEmail);
         }
-    }, [email, loggedIn, userEmail, setUserEmail]);
-
-    
+    }, [history, email, loggedIn, userEmail, setUserEmail]);
 
     return(
         <>

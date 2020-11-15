@@ -117,7 +117,7 @@ export const api = new Api({
     server: "https://api.hcq.students.nomoreparties.site",
     // server: "http://localhost:3001",
     headers: {
-        "Authorization": "7c532e9d-132b-43e0-b1d4-55c21c0fd902",
+        // "Authorization": "7c532e9d-132b-43e0-b1d4-55c21c0fd902",
         "Content-Type": "application/json",
     }
 });

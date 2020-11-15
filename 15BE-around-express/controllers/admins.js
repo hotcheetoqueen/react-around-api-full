@@ -6,7 +6,7 @@ const RequestError = require('../errors/RequestError');
 
 const registerAdmin= (req, res) => {
   // req.body
-  const { email, password } = req.body;
+  const { email, password, name, about, avatar } = req.body;
 
   if (!email || !password) return res.status(400).send({ message: 'Uh oh, something is wrong with those credentials!'});
 
@@ -29,6 +29,8 @@ const authorizeAdmin = (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) return res.status(400).send({ message: 'Uh oh, something is wrong with those credentials!'});
+
+  // TODO check id & move isPasswordValid to .then(), don't need error; req._id = user._id;
 
   return Admin.findOne({ email }).select('+password')
     .then(admin => {

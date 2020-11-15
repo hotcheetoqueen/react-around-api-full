@@ -33,7 +33,7 @@ function App(props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [message, setMessage] = React.useState('');
-  const [token, setToken] = React.useState(localStorage.getItem('jwt'));
+  const [token, setToken] = React.useState(localStorage.getItem('token'));
 
   const history = useHistory();
 
@@ -136,7 +136,7 @@ function App(props) {
   }
 
   const onLogout = () => {
-    localStorage.removeItem('jwt');
+    localStorage.removeItem('token');
     setLoggedIn(false);
     history.push('/signin');
   }
@@ -178,7 +178,7 @@ function App(props) {
     }
 
     React.useEffect(() => {
-      // you call this token with set state above, if uncomment remove this so it uses that variable
+      // you call this token with set state above, if you uncomment that remove this so it uses that variable
       // const jwt = localStorage.getItem('jwt');
   
       if (token) {
@@ -228,7 +228,7 @@ function App(props) {
           if (data) {
             // if (data && data.token) {
             //     setToken(data.token);
-            //     localStorage.setItem('jwt', data.token);
+            //     localStorage.setItem('token', data.token);
                 handleLogin();
                 history.push('/home')
 

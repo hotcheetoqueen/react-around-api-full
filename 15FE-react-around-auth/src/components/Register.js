@@ -10,7 +10,7 @@ function Register({ handleLogin, handleTooltip, handleRegisterSubmit }) {
     const history = useHistory();
 
     React.useEffect(() => {
-        if(localStorage.getItem('jwt')) {
+        if(localStorage.getItem('token')) {
             history.push('/home');
         }
     }, [history])
