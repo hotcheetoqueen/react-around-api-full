@@ -44,9 +44,9 @@ module.exports.getProfile = (req, res, next) => {
 module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
 
-  // bcrypt.hash(password, 10)
-  //   .then((hash) =>
-    User.create({ name, about, avatar, email, password }).select('+password')
+  bcrypt.hash(password, 10)
+    .then((hash) =>
+    User.create({ name, about, avatar, email, password })
       .then((user) => res.send({ data: user }))
       .catch((err) => {
         if (err.name === 'ValidationError') {
@@ -54,8 +54,8 @@ module.exports.createUser = (req, res, next) => {
         }
         next(err);
       })
-
-      console.log('user');
+    )
+      // console.log('user');
 
       // .catch(next);
 };
@@ -123,6 +123,8 @@ module.exports.login = (req, res, next) => {
       return bcrypt.compare(password, user.password);
     }
   })
+
+  return bcrypt.compare(password, user.password)
       .then((isPasswordValid) => {
         if(!isPasswordValid) {
           throw new RequestError('Something is wrong with those credentials');

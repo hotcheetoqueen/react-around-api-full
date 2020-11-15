@@ -5,10 +5,6 @@ router.get('/', (req, res) => {
   users.getAllUsers(req, res);
 });
 
-// router.post('/', (req, res) => {
-//   users.createUser(req, res);
-// });
-
 router.get('/:id', (req, res) => {
   users.getProfile(req, res);
 });
