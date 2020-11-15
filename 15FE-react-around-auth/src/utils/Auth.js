@@ -1,26 +1,28 @@
 
-// export const BASE_URL = 'http://localhost:3001';
+// const BASE_URL = 'http://localhost:3001';
 export const BASE_URL = 'https://api.hcq.students.nomoreparties.site';
 
 
-export const register = (identifier, password) => {
+module.exports.register = (email, password) => {
+    console.log(email, password);
     return fetch(`${BASE_URL}/signup`, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email: identifier, password: password }),
+        body: JSON.stringify({ email, password }),
     })
-    .then((response) => {
-        return response.json();
-    })
-    .then((res)=> {
-        return res;
-    })
+    .then((res) => {
+        console.log(res);
+        return res.json();
+      });
+    // .then((res)=> {
+    //     return res;
+    // })
 }
 
-export const authorize = (email, password) => {
+module.exports.authorize = (email, password) => {
     return fetch(`${BASE_URL}/signin`, {
         method: 'POST',
         headers: {
@@ -40,7 +42,7 @@ export const authorize = (email, password) => {
     })
 }
 
-export const getContent = (token) => {
+module.exports.getContent = (token) => {
     return fetch(`${BASE_URL}/users/me`, {
         method: 'GET',
         headers: {

@@ -16,20 +16,20 @@ const userSchema = new mongoose.Schema({
   avatar: {
     type: String,
     default: 'https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg',
-    validate: {
-      validator(v) {
-        return /^(https?):\/\/(www\.)?[\w-@:%+~#=]+[.][.\w/\-?#=&~@:()!$+%]*$/gm.test(v);
-      },
-    },
+    // validate: {
+    //   validator(v) {
+    //     return /^(https?):\/\/(www\.)?[\w-@:%+~#=]+[.][.\w/\-?#=&~@:()!$+%]*$/gm.test(v);
+    //   },
+    // },
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    validate: {
-      validator: (email) => validator.isEmail(email),
-      message: 'That is not a valid email address',
-    },
+    // validate: {
+    //   validator: (email) => validator.isEmail(email),
+    //   message: 'That is not a valid email address',
+    // },
   },
   password: {
     type: String,

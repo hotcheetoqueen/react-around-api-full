@@ -14,7 +14,7 @@ import Login from './Login';
 import Main from './Main';
 import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
-import * as auth from '../utils/Auth';
+import auth from '../utils/Auth';
 
 function App(props) {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
@@ -201,7 +201,8 @@ function App(props) {
 
         auth.register(email, password)
             .then((res) => {
-            if (!res) {
+              console.log(res);
+            if (!res.data) {
                 handleTooltip('failure');
                 throw new Error(`${res.message ? res.message : res.error}`);
               }})
@@ -214,7 +215,7 @@ function App(props) {
                 return res;
               })
             // .then(resetForm)
-            .catch(err => {
+            .catch((err) => {
               console.log(err)
             });
         }

@@ -4,10 +4,13 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('cors');
 const validator = require('validator');
 const auth = require('./utils/jwt');
+const { login, createUser } = require('../controllers/users');
+
+// const auth = require('./middlewares/auth');
 
 const cardsRoute = require('./routes/cards');
 const usersRoute = require('./routes/users');
-const adminRoute = require('./routes/admins');
+// const adminRoute = require('./routes/admins');
 
 const ServerError = require('./errors/ServerError.js');
 
@@ -38,10 +41,18 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
+
+app.post('/signup', createUser);
+app.post('/signin', login);
+
 app.use('/cards', auth.isAuthorized, cardsRoute);
 app.use('/users', auth.isAuthorized, usersRoute);
-app.use('/', adminRoute);
+// app.use('/cards', auth, cardsRoute);
+// app.use('/users', auth, usersRoute);
+// app.use('/admins', auth, adminRoute);
+// app.use('/', adminRoute);
 
+// app.use('/', usersRoute);
 
 app.use(errorLogger);
 // app.use(errors());
@@ -52,7 +63,6 @@ app.use((err, req, res, next) => {
   }
 
   res.status(err.statusCode).send({ message: err.message })
-  .catch(next);
 })
 
 
