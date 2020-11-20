@@ -3,7 +3,8 @@ const mongoose = require('mongoose');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('cors');
 const validator = require('validator');
-const auth = require('./utils/jwt');
+// const jwt = require('./utils/jwt');
+const auth = require('./middlewares/auth');
 const { login, createUser } = require('./controllers/users');
 
 // const auth = require('./middlewares/auth');
@@ -45,17 +46,12 @@ app.get('/crash-test', () => {
 app.post('/signup', createUser);
 app.post('/signin', login);
 
-app.use('/cards', auth.isAuthorized, cardsRoute);
-app.use('/users', auth.isAuthorized, usersRoute);
-// app.use('/cards', auth, cardsRoute);
-// app.use('/users', auth, usersRoute);
-// app.use('/admins', auth, adminRoute);
-// app.use('/', adminRoute);
+app.use(auth);
 
-// app.use('/', usersRoute);
+app.use('/cards', cardsRoute);
+app.use('/users', usersRoute);
 
 app.use(errorLogger);
-// app.use(errors());
 
 app.use((err, req, res, next) => {
   if (!err.statusCode) {

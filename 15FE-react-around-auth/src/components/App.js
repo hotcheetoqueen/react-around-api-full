@@ -1,12 +1,12 @@
 import React from 'react';
 import { Route, Switch, useHistory, Redirect, withRouter } from 'react-router-dom';
-import { api } from '../utils/Api';
+import Api from '../utils/Api';
 import { AddPlacePopup } from './AddPlacePopup';
 import { CurrentUserContext } from '../contexts/CurrentUserContext';
 import { EditAvatarPopup } from './EditAvatarPopup';
 import { EditProfilePopup } from './EditProfilePopup';
 import { PopupWithForm } from './PopupWithForm';
-import PopupWithImage from './PopupWithImage'; 
+import PopupWithImage from './PopupWithImage';
 import Footer from './Footer';
 import Header from './Header';
 import InfoTooltip from './InfoTooltip';
@@ -14,7 +14,7 @@ import Login from './Login';
 import Main from './Main';
 import ProtectedRoute from './ProtectedRoute';
 import Register from './Register';
-import auth from '../utils/Auth';
+import * as auth from '../utils/Auth';
 
 function App(props) {
   const [isEditAvatarPopupOpen, setIsEditAvatarPopupOpen] = React.useState(false);
@@ -33,20 +33,57 @@ function App(props) {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [message, setMessage] = React.useState('');
-  const [token, setToken] = React.useState(localStorage.getItem('token'));
+  const [token, setToken] = React.useState(localStorage.getItem('jwt'));
+
+  const api = new Api({
+    server: "http://localhost:3000",
+    headers: {
+        "authorization": token,
+        "Content-Type": "application/json",
+    }
+  });
 
   const history = useHistory();
 
+
+  React.useEffect(() => {
+    const token = localStorage.getItem('jwt');
+
+    if (token) {
+      auth.getContent(token)
+      .then((res) => {
+        if (res) {
+          setLoggedIn(true);
+          // setUserEmail(res.data.email);
+          setCurrentUser(res);
+          setToken(token);
+          history.push('/home');
+        } else {
+          localStorage.removeItem('jwt');
+          setLoggedIn(false);
+        }
+      })
+      .then(() => {
+        api.getCardList()
+            .then((res) => {
+                setCards(res.data);
+            })
+            .catch((err) => console.log(err));
+        })
+        .then(() => history.push('/'))
+    } 
+  }, [token] );
+
   function handleEditAvatarClick() {
-      setIsEditAvatarPopupOpen(true);
+    setIsEditAvatarPopupOpen(true);
   }
 
   function handleEditProfileClick() {
-      setIsEditProfilePopupOpen(true);
+    setIsEditProfilePopupOpen(true);
   }
 
   function handleAddPlaceClick() {
-      setIsAddPlacePopupOpen(true);
+    setIsAddPlacePopupOpen(true);
   }
 
   function handleDeletePlaceClick() {
@@ -54,7 +91,7 @@ function App(props) {
   }
 
   function handleCardClick(card) {
-      setSelectedCard(card);
+    setSelectedCard(card);
   }
 
   function handleUpdateUserInfo({ name, about }) {
@@ -71,21 +108,41 @@ function App(props) {
     }
 
   function handleUpdateAvatar({ avatar }) {
-      api.setUserAvatar(avatar.current.value, token)
+    api.setUserAvatar(avatar.current.value, token)
+    .then((res) => {
+        setCurrentUser(res);
+      })
       .then((res) => {
-          setCurrentUser(res);
-        })
-        .then((res) => {
-          closeAllPopups()
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+        closeAllPopups()
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function handleAddPlace({ caption, imageUrl }) {
-      api.addCard({ caption, imageUrl }, token).then((newCard) => {
-        setCards([...cards, newCard]);
+    api.addCard({ caption, imageUrl }, token).then((newCard) => {
+      setCards([...cards, newCard]);
+    })
+    .then((res) => {
+      closeAllPopups()
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+  }
+
+    function handleCardLike(card) {
+      const isLiked = card.likes.some((i) => i._id === currentUser._id);
+      api.toggleLike(card._id, isLiked, token).then((newCard) => {
+        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+        setCards(newCards);
+      });
+    }
+
+  function handleCardDelete(card) {    
+      api.deleteCard(card._id, token).then(() => {
+          setCards(cards.filter((c) => c._id !== card._id));
       })
       .then((res) => {
         closeAllPopups()
@@ -95,48 +152,23 @@ function App(props) {
       });
     }
 
-    function handleCardLike(card) {
-        const isLiked = card.likes.some((i) => i._id === currentUser._id);
-        api.toggleLike(card._id, isLiked, token).then((newCard) => {
-          const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
-          setCards(newCards);
-        });
-    }
-
-    function handleCardDelete(card) {    
-        api.deleteCard(card._id, token).then(() => {
-            setCards(cards.filter((c) => c._id !== card._id));
-        })
-        .then((res) => {
-          closeAllPopups()
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    }
-  
-    React.useEffect(() => {
-      setCards(cards);
-    }, [cards])
-  
-
   function closeAllPopups() {
-      setIsAddPlacePopupOpen(false);
-      setIsEditProfilePopupOpen(false);
-      setIsEditAvatarPopupOpen(false);
-      setIsDeletePlacePopupOpen(false);
-      setIsImagePopupOpen(false);
-      setIsTooltipOpen(false);
-      setSelectedCard(null);
+    setIsAddPlacePopupOpen(false);
+    setIsEditProfilePopupOpen(false);
+    setIsEditAvatarPopupOpen(false);
+    setIsDeletePlacePopupOpen(false);
+    setIsImagePopupOpen(false);
+    setIsTooltipOpen(false);
+    setSelectedCard(null);
   }
 
   function handleTooltip(feedback) {
-      setTooltipFeedback(feedback);
-      setIsTooltipOpen(true);
+    setTooltipFeedback(feedback);
+    setIsTooltipOpen(true);
   }
 
   const onLogout = () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('jwt');
     setLoggedIn(false);
     history.push('/signin');
   }
@@ -146,54 +178,12 @@ function App(props) {
     setUserEmail(email);
   }
 
-  // const loggedInRef = handleLogin();
-
-  React.useEffect(() => {
-
-    if (loggedIn) {
-      api.getUserInfo(token)
-        .then((res) => {
-          setCurrentUser(res);
-      // setCurrentUser(res.owner._id);
-      // setIsLoading(true);
-        api.getCardList()
-            .then((res) => {
-              if (res) {
-                setCards((cards) => [...cards, ...res]);
-              }
-            }).catch((err) => {
-                console.log(err);
-            });
-        })
-          .catch((err) => {
-            console.log(err);
-          });
-        }
-      }, [loggedIn, token]);
-
       const resetForm = (e) => {
         setEmail('')
         setPassword('')
         setMessage('')
     }
 
-    React.useEffect(() => {
-      // you call this token with set state above, if you uncomment that remove this so it uses that variable
-      // const jwt = localStorage.getItem('jwt');
-  
-      if (token) {
-        auth.getContent(token)
-        .then((res) => {
-          setLoggedIn(true);
-          setUserEmail(res.data.email);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-      } else {
-        setLoggedIn(false);
-      }
-    }, [token] );
 
     const handleRegisterSubmit = (e) => {
         e.preventDefault();
@@ -201,20 +191,17 @@ function App(props) {
 
         auth.register(email, password)
             .then((res) => {
-              console.log(res);
-            if (!res.data) {
+            if (!(res.data && res.data._id)) {
                 handleTooltip('failure');
                 throw new Error(`${res.message ? res.message : res.error}`);
-              }})
+              } else {
+                handleTooltip('success');
+              }
+            })
               .then((res) => {
                 setRegistered(true);
                 history.push('/signin');
               })
-              .then((res) => {
-                handleTooltip('success');
-                return res;
-              })
-            // .then(resetForm)
             .catch((err) => {
               console.log(err)
             });
@@ -226,33 +213,22 @@ function App(props) {
 
         auth.authorize(email, password)
         .then((data) => {
-          if (data) {
-            // if (data && data.token) {
-            //     setToken(data.token);
-            //     localStorage.setItem('token', data.token);
-                handleLogin();
-                history.push('/home')
-
+          if (data.token) {
+              localStorage.setItem('token', data.token);
+              setToken(data.token);
+              handleLogin();
+              history.push('/home')
             } else {
                 resetForm();
-                if (!email || !password){
-                  throw new Error('400 - uh oh, something is off with those credentials!');
+                if (data.err == 401){
+                  throw new Error('Uh oh, something is off with those credentials!');
                 }
-                if (!data){
+                if (data.err == 403){
                     throw new Error('We cannot seem to find that user -- are you sure they exist?')
                 }
           }
         })
-        // .then(() => {
-        //   // handleLogin();
-        // })
-        // .then(() => {
-        //     resetForm();
-        // })
-        // .then(() => {
-        //   history.push('/home')
-        // })
-        .catch(err => setMessage(err.message));
+        .catch((err) => setMessage(err.message));
     }
 
   return (

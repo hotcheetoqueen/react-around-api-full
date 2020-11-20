@@ -39,20 +39,38 @@ module.exports.getProfile = (req, res, next) => {
     .catch(next);
 };
 
+module.exports.getCurrentUser = (req, res, next) => {
+  User.findById(req.user.id)
+    .then(user => {
+      if (!user) {
+        throw new NotFoundError('User not found')
+      }
+      res.send(user)
+    })
+    .catch(next)
+};
+
 module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
 
-  bcrypt.hash(password, 10)
-    .then((hash) =>
-    User.create({ name, about, avatar, email, password: hash }))
-      .then((user) => res.send({ data: user }))
-      .catch((err) => {
-        if (err.name === 'ValidationError') {
-          throw new RequestError('Cannot create user');
-        }
-        next(err);
-      })
-      .catch(next);
+  return bcrypt.hash(password, 10, (error, hash) => {
+    return User.findOne({ email })
+    .then((user) => {
+      if (user) return res.status(403).send({ message: 'This user already exists'});
+
+      return User.create({ name, about, avatar, email, password: hash })
+        .then((user) => {
+          return res.status(200).send({
+            message: `User ${email} successfully created!`,
+            data: {
+              _id: user._id
+            }
+          });
+        })
+        .catch((err) => res.status(400).send(err));
+    })
+    .catch(() => res.status(400).send({ message: 'Error occurred' }));
+  });
 };
 
 module.exports.updateUser = (req, res, next) => {
@@ -81,39 +99,35 @@ module.exports.updateAvatar = (req, res, next) => {
     .catch(next);
 };
 
+const getJwtToken = (id) => {
+  return jwt.sign({ id }, 'secret');
+}
+
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password) return res.status(400).send({ message: 'Uh oh, something is wrong with those credentials!'});
+  if (!email || !password)
+    return res.status(400).send({ message: 'Uh oh, email and password is missing!'});
 
-  // TODO check id & move isPasswordValid to .then(), don't need error; req._id = user._id;
-
-  User.findOne({ email }).select('+password')
+  return User.findOne({ email }).select('+password')
     .then((user) => {
-      if (!user) {
-        console.log(user);
+      if (!user) return res.status(403).send({ message: 'Uh oh, something is wrong with those credentials!'})
 
-        throw new RequestError('Something is wrong with those credentials');
-    } else {
-      req._id = user._id;
-      return bcrypt.compare(password, user.password);
-    }
-  })
+      return bcrypt.compare(password, user.password, (error, isPasswordValid) => {
 
-  return bcrypt.compare(password, user.password)
-      .then((isPasswordValid, user) => {
-        if(!isPasswordValid) {
-          throw new RequestError('Something is wrong with those credentials');
-        }
+        if (!isPasswordValid) return res.status(401).send({ message: 'Uh oh, something is wrong with those credentials!'});
 
-        const token = generateJWT(user.id);
-        // const token = jwt.sign({ _id: req._id }, NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret', { expiresIn: '7d' });
-        // res.header('authorization', `Bearer ${token}`);
-        // res.cookie('token', token, { httpOnly: true });
-        res.status(200).send({ token });
+        const token = getJwtToken(user._id);
 
-        //Do I still need this?
-        // return res.status(200).send({ email });
-      })
-  .catch(next);
+        res.cookie('jwt', token, {
+          maxAge: 3600000 * 24 * 7,
+          httpOnly: true
+        })
+
+        return res.status(200).send({ token });
+      });
+    })
+  .catch((err) => {
+    res.status(400).send({ message: 'Error occured' })
+  });
 }

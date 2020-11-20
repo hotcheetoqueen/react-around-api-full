@@ -1,25 +1,31 @@
-// const jwt = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
+const JWT_SECRET = 'blabla';
+// const AuthError = require('../middleware/errors/AuthError')
 
-// module.exports = (req, res, next) => {
-//   const { authorization } = req.headers;
-//   if (!authorization || !authorization.startsWith('Bearer ')) {
-//     return res
-//       .status(401)
-//       .send({ message: 'Authorization Required' });
-//   }
+module.exports = (req, res, next) => {
 
-//   const token = authorization.replace('Bearer ', '');
-//   let payload;
+  const { authorization } = req.headers;
+  const token = authorization;
 
-//   try {
-//     payload = jwt.verify(token, 'secret');
-//   } catch (err) {
-//     return res
-//       .status(401)
-//       .send({ message: 'Authorization Required' });
-//   }
+  console.log('authorization', authorization)
 
-//   req.admin = payload;
+  if (!token) {
+    console.log('No token!')
+    return res
+      .status(401)
+      .send({ message: 'Authorization Required' });
+  }
 
-//   next();
-// };
+  let payload;
+
+  try {
+    payload = jwt.verify(token, JWT_SECRET);
+  } catch (err) {
+    return res
+      .status(401)
+      .send({ message: 'Authorization Required' });
+  }
+
+  req.user = {bla: '123', ...payload};
+  next();
+};

@@ -6,13 +6,14 @@ class Api {
 
 // owner._id = : "c64138ece4ac2d1c50e9ce31"
 
-    getCardList(token) {
-        return fetch(`${this.server}/cards`, {
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${token}`
-            },
-        }).then(res => res.ok ? res.json() : Promise.reject('Error: ' + res.status))
+    getCardList() {
+        return fetch(`${this.server}/cards`, { headers: this.headers })
+            .then(res => {
+                return res.ok ? res.json() : Promise.reject('Error: ' + res.status)
+            })
+            .catch(err => {
+                console.log('console.log', console.log(err))
+            })
     }
 
 //  getCardList(token) {
@@ -112,12 +113,14 @@ class Api {
     }
 }
 
-export const api = new Api({
+export default Api;
+
+// export const api = new Api({
     // server: "https://around.nomoreparties.co/v1/group-2",
-    server: "https://api.hcq.students.nomoreparties.site",
-    // server: "http://localhost:3001",
-    headers: {
-        // "Authorization": "7c532e9d-132b-43e0-b1d4-55c21c0fd902",
-        "Content-Type": "application/json",
-    }
-});
+    // server: "https://api.hcq.students.nomoreparties.site",
+//     server: "http://localhost:3001",
+//     headers: {
+//         // "Authorization": "7c532e9d-132b-43e0-b1d4-55c21c0fd902",
+//         "Content-Type": "application/json",
+//     }
+// });
