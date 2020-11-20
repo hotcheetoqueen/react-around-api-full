@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken')
-const JWT_SECRET = 'temp';
+const JWT_SECRET = 'secret';
 const Admin = require('../models/admin');
 const User = require('../models/user');
 
-const generateJWT = (id) => jwt.toString({ id }, JWT_SECRET, { expiresIn: '7d' });
+const generateJWT = (_id) => jwt.toString({ _id }, JWT_SECRET, { expiresIn: '7d' });
 
 const isAuthorized = (token, _id) => {
   return jwt.verify(token, JWT_SECRET, (err, decoded) => {

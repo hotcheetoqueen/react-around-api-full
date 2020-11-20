@@ -6,8 +6,12 @@ class Api {
 
 // owner._id = : "c64138ece4ac2d1c50e9ce31"
 
-    getCardList() {
-        return fetch(`${this.server}/cards`, { headers: this.headers })
+    getCardList(token) {
+        return fetch(`${this.server}/cards`, {            
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${token}`
+            }})
             .then(res => {
                 return res.ok ? res.json() : Promise.reject('Error: ' + res.status)
             })
@@ -35,7 +39,7 @@ class Api {
     }
 
     getAppInfo(token) {
-        return Promise.all([this.getCardList(), this.getUserInfo()]);
+        return Promise.all([this.getCardList(token), this.getUserInfo(token)]);
     }
 
     addCard({ caption, imageUrl }, token) {
@@ -54,7 +58,7 @@ class Api {
 
     toggleLike(cardId, isLiked, token) {
         const method = isLiked ? 'DELETE' : 'PUT';
-        return fetch(`${this.server}/cards/likes/${cardId}/`, {
+        return fetch(`${this.server}/cards/${cardId}/likes/`, {
             method: method,
             headers: {
                 "Content-Type": "application/json",

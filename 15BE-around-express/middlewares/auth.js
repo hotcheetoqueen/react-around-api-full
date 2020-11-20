@@ -1,11 +1,11 @@
 const jwt = require('jsonwebtoken');
-const JWT_SECRET = 'blabla';
+const JWT_SECRET = 'secret';
 // const AuthError = require('../middleware/errors/AuthError')
 
 module.exports = (req, res, next) => {
 
   const { authorization } = req.headers;
-  const token = authorization;
+  const token = authorization.replace('Bearer ', '');
 
   console.log('authorization', authorization)
 
@@ -26,6 +26,8 @@ module.exports = (req, res, next) => {
       .send({ message: 'Authorization Required' });
   }
 
-  req.user = {bla: '123', ...payload};
+  req.user = payload;
+
+  // req.user = {bla: '123', ...payload};
   next();
 };

@@ -47,7 +47,7 @@ function App(props) {
 
 
   React.useEffect(() => {
-    const token = localStorage.getItem('jwt');
+    const token = localStorage.getItem('token');
 
     if (token) {
       auth.getContent(token)
@@ -59,12 +59,12 @@ function App(props) {
           setToken(token);
           history.push('/home');
         } else {
-          localStorage.removeItem('jwt');
+          localStorage.removeItem('token');
           setLoggedIn(false);
         }
       })
       .then(() => {
-        api.getCardList()
+        api.getCardList(token)
             .then((res) => {
                 setCards(res.data);
             })
@@ -136,6 +136,7 @@ function App(props) {
       const isLiked = card.likes.some((i) => i._id === currentUser._id);
       api.toggleLike(card._id, isLiked, token).then((newCard) => {
         const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
+        console.log('Cards ', cards, newCards)
         setCards(newCards);
       });
     }
@@ -217,7 +218,7 @@ function App(props) {
               localStorage.setItem('token', data.token);
               setToken(data.token);
               handleLogin();
-              history.push('/home')
+              history.push('/home');
             } else {
                 resetForm();
                 if (data.err == 401){
