@@ -19,7 +19,7 @@ module.exports.getCards = (req, res, next) => {
 module.exports.postCard = (req, res, next) => {
   const { name, link } = req.body;
   console.log(req.user)
-  Card.create({ name, link, owner: req.user._id })
+  Card.create({ name, link, owner: req.user.id })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
       console.log('Error ', err)
