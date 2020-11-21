@@ -54,7 +54,6 @@ function App(props) {
       .then((res) => {
         if (res) {
           setLoggedIn(true);
-          // setUserEmail(res.data.email);
           setCurrentUser(res);
           setToken(token);
           history.push('/home');
@@ -122,7 +121,7 @@ function App(props) {
 
   function handleAddPlace({ caption, imageUrl }) {
     api.addCard({ caption, imageUrl }, token).then((newCard) => {
-      setCards([...cards, newCard]);
+      setCards([...cards, newCard.data]);
     })
     .then((res) => {
       closeAllPopups()
