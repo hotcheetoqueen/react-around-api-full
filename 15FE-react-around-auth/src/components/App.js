@@ -97,7 +97,7 @@ function App(props) {
   function handleUpdateUserInfo({ name, about }) {
       api.updateUserInfo({ name, about }, token)
         .then((res) => {
-          setCurrentUser(res)
+          setCurrentUser(res.data)
         })
         .then((res) => {
           closeAllPopups()
@@ -134,11 +134,12 @@ function App(props) {
 
     function handleCardLike(card) {
       const isLiked = card.likes.some((i) => i._id === currentUser._id);
-      api.toggleLike(card._id, isLiked, token).then((newCard) => {
-        const newCards = cards.map((c) => (c._id === card._id ? newCard : c));
-        console.log('Cards ', cards, newCards)
-        setCards(newCards);
-      });
+      api.toggleLike(card._id, isLiked, token)
+        .then((newCard) => {
+          const newCards = cards.map((c) => (c._id === card._id ? newCard.data : c));
+          // console.log('Cards ', cards, newCards)
+          setCards(newCards);
+        });
     }
 
   function handleCardDelete(card) {    

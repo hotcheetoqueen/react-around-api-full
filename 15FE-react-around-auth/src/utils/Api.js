@@ -68,7 +68,10 @@ class Api {
             if (res.ok) {
                 return res.json();
             }
+
+            return Promise.reject(res.statusText);
         })
+        .catch(err => { console.log(err) });
     }
 
     deleteCard(cardId, token) {

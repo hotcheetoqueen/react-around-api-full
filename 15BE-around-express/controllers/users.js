@@ -75,8 +75,10 @@ module.exports.createUser = (req, res, next) => {
 
 module.exports.updateUser = (req, res, next) => {
   const { name, about } = req.body;
-  User.findByIdAndUpdate(req.user._id, { name, about }).select('+password')
-    .then((user) => res.send({ data: user }))
+  User.findByIdAndUpdate(req.user.id, { name, about }, { new: true, runValidators: true })
+    .then((user) => {
+      res.send({ data: user })
+    })
     .catch((err) => {
       if (err.name === 'ValidationError') {
         throw new RequestError('Cannot update user');
