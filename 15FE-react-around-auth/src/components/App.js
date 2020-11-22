@@ -278,7 +278,8 @@ function App(props) {
                             onAddPlace={handleAddPlaceClick}
                             onEditAvatar={handleEditAvatarClick}
                             onCardClick={handleCardClick}
-                            onDeleteClick={handleDeletePlaceClick}
+                            onCardDelete={handleDeletePlaceClick}
+                            // onDeleteClick={handleDeletePlaceClick}
                             // onCardDelete={handleCardDelete}
                             onClosePopups={closeAllPopups}
                             onCardLike={handleCardLike}
