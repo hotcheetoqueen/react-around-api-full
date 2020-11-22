@@ -109,7 +109,7 @@ function App(props) {
   function handleUpdateAvatar({ avatar }) {
     api.setUserAvatar(avatar.current.value, token)
     .then((res) => {
-        setCurrentUser(res);
+        setCurrentUser(res.data);
       })
       .then((res) => {
         closeAllPopups()
@@ -142,15 +142,16 @@ function App(props) {
     }
 
   function handleCardDelete(card) {    
-      api.deleteCard(card._id, token).then(() => {
-          setCards(cards.filter((c) => c._id !== card._id));
-      })
-      .then((res) => {
-        closeAllPopups()
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+      api.deleteCard(card._id, token)
+        .then(() => {
+            setCards(cards.filter((c) => c._id !== card._id));
+        })
+        .then((res) => {
+          closeAllPopups()
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
 
   function closeAllPopups() {
@@ -277,7 +278,8 @@ function App(props) {
                             onAddPlace={handleAddPlaceClick}
                             onEditAvatar={handleEditAvatarClick}
                             onCardClick={handleCardClick}
-                            onCardDelete={handleDeletePlaceClick}
+                            onDeleteClick={handleDeletePlaceClick}
+                            // onCardDelete={handleCardDelete}
                             onClosePopups={closeAllPopups}
                             onCardLike={handleCardLike}
                             isEditProfilePopupOpen={isEditProfilePopupOpen}
