@@ -36,7 +36,8 @@ function App(props) {
   const [token, setToken] = React.useState(localStorage.getItem('jwt'));
 
   const api = new Api({
-    server: "http://localhost:3000",
+    // server: "http://localhost:3000",
+    server: "https://api.hcq.students.nomoreparties.site",
     headers: {
         "authorization": token,
         "Content-Type": "application/json",
