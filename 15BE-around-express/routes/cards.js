@@ -9,7 +9,7 @@ router.post('/', (req, res) => {
   cards.postCard(req, res);
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:cardId', (req, res) => {
   cards.deleteCard(req, res);
 });
 
