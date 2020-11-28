@@ -8,10 +8,12 @@ const ServerError = require('../errors/ServerError');
 module.exports.getCards = (req, res, next) => {
   Card.find({})
     .populate('owner')
-    .populate('likes')
-    .then((cards) => res.send({ data: cards }))
+    // .populate('likes')
+    .then((cards) => {
+      res.send({ data: cards });
+    })
     .catch(() => {
-      throw new ServerError('Unable to find cards')
+      throw new ServerError('Unable to find cards');
     })
     .catch(next);
 };
@@ -55,30 +57,23 @@ module.exports.likeCard = (req, res, next) => {
   Card.findById(req.params.cardId)
   .then((card) => {
     if (card.likes.includes(user)) {
-      return res.status(200).send({data: card})
+      return res.status(200).send({ data: card })
     }
-    Card.findByIdAndUpdate(card._id,
+    return Card.findByIdAndUpdate(card._id,
       { $addToSet: { 'likes': user } }, { new: true, runValidators: true })
       .then(card => {
-        res.send({data: card})
+        res.send({ data: card })
       })
-  })
+    })
     .catch(next);
 };
 
 module.exports.unlikeCard = (req, res, next) => {
   let user = req.user.id;
 
-  Card.findById(req.params.cardId)
-  .then((card) => {
-    if (card.likes.includes(user)) {
-      return res.status(200).send({data: card})
-    }
-  Card.findByIdAndUpdate(card._id,
-    { $pull: { 'likes': user }  }, { new: true, runValidators: true })
+  Card.findByIdAndUpdate(req.params.cardId,
+    { $pull: { 'likes': user } }, { new: true, runValidators: true })
     .then(card => {
-      res.send({data: card})
+      res.status(200).send({ data: card })
     })
-  })
-    .catch(next);
 };

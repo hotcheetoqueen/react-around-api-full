@@ -34,9 +34,10 @@ function App(props) {
   const [password, setPassword] = React.useState('');
   const [message, setMessage] = React.useState('');
   const [token, setToken] = React.useState(localStorage.getItem('jwt'));
+  const [cardToDelete, setCardToDelete] = React.useState(null);
 
   const api = new Api({
-    // server: "http://localhost:3000",
+    // server: "http://localhost:3001",
     server: "https://api.hcq.students.nomoreparties.site",
     headers: {
         "authorization": token,
@@ -86,8 +87,9 @@ function App(props) {
     setIsAddPlacePopupOpen(true);
   }
 
-  function handleDeletePlaceClick() {
+  function handleDeletePlaceClick(card) {
     setIsDeletePlacePopupOpen(true);
+    setCardToDelete(card);
   }
 
   function handleCardClick(card) {
@@ -133,26 +135,29 @@ function App(props) {
   }
 
     function handleCardLike(card) {
-      const isLiked = card.likes.some((i) => i._id === currentUser._id);
+      const isLiked = card.likes.some((i) => i === currentUser._id);
+
       api.toggleLike(card._id, isLiked, token)
         .then((newCard) => {
           const newCards = cards.map((c) => (c._id === card._id ? newCard.data : c));
-          // console.log('Cards ', cards, newCards)
+
           setCards(newCards);
         });
     }
 
-  function handleCardDelete(card) {    
-      api.deleteCard(card._id, token)
-        .then(() => {
-            setCards(cards.filter((c) => c._id !== card._id));
-        })
-        .then((res) => {
-          closeAllPopups()
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+  function handleCardDelete(e) {   
+    e.preventDefault();
+
+    api.deleteCard(cardToDelete._id, token)
+      .then((c) => {
+          setCards(cards.filter((c) => c._id !== cardToDelete._id));
+      })
+      .then((res) => {
+        closeAllPopups()
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     }
 
   function closeAllPopups() {
@@ -270,7 +275,7 @@ function App(props) {
                             onClose={closeAllPopups}
                             onAddNewCard={handleAddPlace}
                         />
-                        <PopupWithForm name="delete" title="Are you sure?" isOpen={isDeletePlacePopupOpen} onClose={closeAllPopups} onDeletePlace={handleDeletePlaceClick} text="Yes" />
+                        <PopupWithForm name="delete" title="Are you sure?" isOpen={isDeletePlacePopupOpen} onClose={closeAllPopups} onSubmit={handleCardDelete} text="Yes" />
                         <PopupWithImage isOpen={isImagePopupOpen} onClose={closeAllPopups} card={selectedCard} />
                         <ProtectedRoute path='/home'
                             component={Main}
