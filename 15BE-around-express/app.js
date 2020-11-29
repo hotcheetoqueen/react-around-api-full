@@ -63,13 +63,7 @@ app.use('/users', usersRoute);
 app.use(errorLogger);
 
 app.use((err, req, res, next) => {
-  if (!err.statusCode) {
-    console.log('if', err);
-    res.status(500).send({ message: 'Hmmph, something is not right' });
-  } else {
-    console.log('else', err);
-    res.status(err.statusCode).send({ message: err.message })
-  }
+  res.status(statusCode).send({ message: message })
 })
 
 

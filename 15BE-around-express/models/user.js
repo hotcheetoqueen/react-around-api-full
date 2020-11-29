@@ -5,31 +5,22 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: 'Jacques Cousteau',
     minlength: 2,
-    maxlength: 30,
+    maxlength: 26,
   },
   about: {
     type: String,
     default: 'Explorer',
     minlength: 2,
-    maxlength: 30,
+    maxlength: 36,
   },
   avatar: {
     type: String,
     default: 'https://pictures.s3.yandex.net/resources/avatar_1604080799.jpg',
-    // validate: {
-    //   validator(v) {
-    //     return /^(https?):\/\/(www\.)?[\w-@:%+~#=]+[.][.\w/\-?#=&~@:()!$+%]*$/gm.test(v);
-    //   },
-    // },
   },
   email: {
     type: String,
     required: true,
     unique: true,
-    // validate: {
-    //   validator: (email) => validator.isEmail(email),
-    //   message: 'That is not a valid email address',
-    // },
   },
   password: {
     type: String,

@@ -33,10 +33,10 @@ module.exports.postCard = (req, res, next) => {
 };
 
 module.exports.deleteCard = (req, res, next) => {
-  Card.findByIdAndRemove(req.params.cardId)
+  Card.findByIdAndDelete(req.params.cardId)
     .then((card) => {
       if (card) {
-        res.send({ data: card });
+        res.send({ message: 'Card deleted' });
       } else if (!card) {
         throw new NotFoundError('Unable to find card');
       } else {

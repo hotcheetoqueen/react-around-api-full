@@ -54,11 +54,7 @@ module.exports.createUser = (req, res, next) => {
   const { name, about, avatar, email, password } = req.body;
 
   return bcrypt.hash(password, 10, (error, hash) => {
-    return User.findOne({ email })
-    .then((user) => {
-      if (user) return res.status(403).send({ message: 'This user already exists'});
-
-      return User.create({ name, about, avatar, email, password: hash })
+    return User.create({ name, about, avatar, email, password: hash })
         .then((user) => {
           return res.status(200).send({
             message: `User ${email} successfully created!`,
@@ -67,9 +63,14 @@ module.exports.createUser = (req, res, next) => {
             }
           });
         })
-        .catch((err) => res.status(400).send(err));
-    })
-    .catch(() => res.status(400).send({ message: 'Error occurred' }));
+        .catch((err) => {
+          if (err.name === 'ValidationError' || err.name === 'MongoError') {
+            throw new RequestError('User cannot be created because of an issue with the credentials');
+          }
+          next(err);
+      })
+    .catch(next);
+
   });
 };
 
@@ -108,16 +109,21 @@ const getJwtToken = (id) => {
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
 
-  if (!email || !password)
-    return res.status(400).send({ message: 'Uh oh, email and password is missing!'});
+  if (!email || !password) {
+    throw new RequestError('Uh oh, email and password is missing!');
+  }
 
   return User.findOne({ email }).select('+password')
     .then((user) => {
-      if (!user) return res.status(403).send({ message: 'Uh oh, something is wrong with those credentials!'})
+      if (!user) {
+        throw new AuthError('Uh oh, something is wrong with those credentials!');
+      }
 
       return bcrypt.compare(password, user.password, (error, isPasswordValid) => {
 
-        if (!isPasswordValid) return res.status(401).send({ message: 'Uh oh, something is wrong with those credentials!'});
+        if (!isPasswordValid) {
+          throw new AuthError('Uh oh, something is wrong with those credentials!');
+        }
 
         const token = getJwtToken(user._id);
 
@@ -129,7 +135,5 @@ module.exports.login = (req, res, next) => {
         return res.status(200).send({ token });
       });
     })
-  .catch((err) => {
-    res.status(400).send({ message: 'Error occured' })
-  });
+  .catch(next);
 }
