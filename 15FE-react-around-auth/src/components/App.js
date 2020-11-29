@@ -176,7 +176,7 @@ function App(props) {
   }
 
   const onLogout = () => {
-    localStorage.removeItem('jwt');
+    localStorage.removeItem('token');
     setLoggedIn(false);
     history.push('/signin');
   }
