@@ -7,6 +7,9 @@ const auth = require('./middlewares/auth');
 const { login, createUser } = require('./controllers/users');
 const { celebrate, Joi, errors } = require('celebrate');
 
+// require('dotenv').config();
+// console.log(process.env.NODE_ENV);
+
 const cardsRoute = require('./routes/cards');
 const usersRoute = require('./routes/users');
 
@@ -63,7 +66,7 @@ app.use('/users', usersRoute);
 app.use(errorLogger);
 
 app.use((err, req, res, next) => {
-  res.status(statusCode).send({ message: message })
+  res.status(err.statusCode).send({ message })
 })
 
 

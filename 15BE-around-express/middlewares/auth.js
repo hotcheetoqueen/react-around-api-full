@@ -1,6 +1,11 @@
 const jwt = require('jsonwebtoken');
 const JWT_SECRET = 'secret';
-// const AuthError = require('../middleware/errors/AuthError')
+const AuthError = require('../errors/AuthError');
+
+
+// dotenv.config();
+
+// const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports = (req, res, next) => {
 
@@ -11,20 +16,17 @@ module.exports = (req, res, next) => {
 
   if (!token) {
     console.log('No token!')
-    return res
-      .status(401)
-      .send({ message: 'Authorization Required' });
+    throw new AuthError('Authorization Required');
   }
 
   let payload;
 
   try {
+    // payload = jwt.verify(token, NODE_ENV === 'production' ? JWT_SECRET : 'secret');
     payload = jwt.verify(token, JWT_SECRET);
   } catch (err) {
-    return res
-      .status(401)
-      .send({ message: 'Authorization Required' });
-  }
+    throw new AuthError('Authorization Required');
+    }
 
   req.user = payload;
 

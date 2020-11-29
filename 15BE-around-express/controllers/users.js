@@ -11,6 +11,9 @@ const NotFoundError = require('../errors/NotFoundError');
 const RequestError = require('../errors/RequestError');
 const ServerError = require('../errors/ServerError');
 
+// dotenv.config();
+
+// const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getAllUsers = (req, res, next) => {
   if (isAuthorized(req.headers.authorization)) return res.status(401);
@@ -116,7 +119,7 @@ module.exports.login = (req, res, next) => {
   return User.findOne({ email }).select('+password')
     .then((user) => {
       if (!user) {
-        throw new AuthError('Uh oh, something is wrong with those credentials!');
+        throw new AuthError('Uh oh, we cannot find those credentials!');
       }
 
       return bcrypt.compare(password, user.password, (error, isPasswordValid) => {
