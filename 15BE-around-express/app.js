@@ -6,6 +6,7 @@ const validator = require('validator');
 // const jwt = require('./utils/jwt');
 const auth = require('./middlewares/auth');
 const { login, createUser } = require('./controllers/users');
+const { celebrate, Joi, errors } = require('celebrate');
 
 // const auth = require('./middlewares/auth');
 
@@ -42,9 +43,23 @@ app.get('/crash-test', () => {
   }, 0);
 });
 
+app.post('/signin', celebrate({
+  body: Joi.object().keys({
+    email: Joi.string().required().email(),
+    password: Joi.string().required(),
+  }),
+}), login);
+app.post('/signup', celebrate({
+  body: Joi.object().keys({
+    name: Joi.string().min(2).max(26),
+    about: Joi.string().min(2).max(36),
+    avatar: Joi.string().uri({ scheme: ['http', 'https'] }),
+    email: Joi.string().required().email(),
+    password: Joi.string().alphanum().required(),
+  }),
+}), createUser);
 
-app.post('/signup', createUser);
-app.post('/signin', login);
+app.use(errors());
 
 app.use(auth);
 
