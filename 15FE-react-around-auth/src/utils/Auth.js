@@ -1,6 +1,6 @@
 
-const BASE_URL = 'http://localhost:3001';
-// export const BASE_URL = 'https://api.hcq.students.nomoreparties.site';
+// const BASE_URL = 'http://localhost:3001';
+export const BASE_URL = 'https://api.hcq.students.nomoreparties.site';
 
 export const register = (email, password) => {
     console.log(email, password);

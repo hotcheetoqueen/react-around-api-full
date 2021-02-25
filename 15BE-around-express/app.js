@@ -16,7 +16,7 @@ const usersRoute = require('./routes/users');
 const ServerError = require('./errors/ServerError.js');
 
 const app = express();
-const { PORT = 3001 } = process.env;
+const { PORT = 3000 } = process.env;
 
 app.use(cors());
 app.options('*', cors());

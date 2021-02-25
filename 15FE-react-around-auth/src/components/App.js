@@ -37,8 +37,8 @@ function App(props) {
   const [cardToDelete, setCardToDelete] = React.useState(null);
 
   const api = new Api({
-    server: "http://localhost:3001",
-    // server: "https://api.hcq.students.nomoreparties.site",
+    // server: "http://localhost:3001",
+    server: "https://api.hcq.students.nomoreparties.site",
     headers: {
         "authorization": token,
         "Content-Type": "application/json",
