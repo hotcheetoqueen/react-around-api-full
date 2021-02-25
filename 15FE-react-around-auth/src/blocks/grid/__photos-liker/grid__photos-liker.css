@@ -1,0 +1,22 @@
+.grid__photos-liker {
+    align-self: center;
+    background: url('../../../images/Liker.png');
+    background-repeat: no-repeat;
+    border: 0;
+    margin-bottom: 5px;
+    height: 18.13px;
+    width: 20.76px;
+}
+
+.grid__photos-liker:hover {
+    opacity: .6;
+    cursor: pointer;
+}
+
+.grid__photos-liker_on {
+    background: url('../../../images/Filled_heart.svg');
+}
+
+.grid__photos-liker:focus {
+    outline: none;
+}

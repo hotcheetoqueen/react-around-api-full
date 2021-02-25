@@ -1,0 +1,26 @@
+.grid__photos-delete {
+    background-image: url('../../../images/Delete.png');
+    width: 18px;
+    height: 19.3px;
+    background-size: contain;
+    position: absolute;
+    top: 19px;
+    right: 15px;
+    z-index: 1;
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+}
+
+.grid__photos-delete:hover {
+    opacity: .6;
+    cursor: pointer;
+}
+
+.grid__photos-delete:focus {
+    outline: none;
+}
+
+.grid__photos-delete_hidden {
+    display: none;
+}

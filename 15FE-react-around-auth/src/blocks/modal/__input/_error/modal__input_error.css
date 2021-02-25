@@ -1,0 +1,21 @@
+@import url('./_active/modal__input_error_active.css');
+
+.modal__input_error {
+    font-size: 12px;
+    line-height: 15px;
+    color: #FF0000;
+    top: calc(100% + 5px);
+    padding-bottom: 0;
+    margin-bottom: 0;
+    left: 0;
+    transition: .3s;
+    margin-left: 36px;
+  }
+
+@media screen and (max-width: 500px) {
+  .modal__input_error {
+    font-size: 8px;
+    line-height: 10px;
+    height: 24px;
+  }
+}

@@ -1,0 +1,17 @@
+.modal__save-btn_disabled {
+    color: rgba(0, 0, 0, .2);
+    background-color: transparent;
+    border: 1px solid rgba(0, 0, 0, .2);
+    box-sizing: border-box;
+    border-radius: 2px;
+    pointer-events: none;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+}
+
+.modal__save-btn_disabled:hover {
+    cursor: default;
+    background: none;
+}

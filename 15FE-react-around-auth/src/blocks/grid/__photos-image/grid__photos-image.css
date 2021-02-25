@@ -1,0 +1,15 @@
+@import url('./_canyon/grid__photos-image_canyon.css');
+@import url('./_jtree/grid__photos-image_jtree.css');
+@import url('./_orleans/grid__photos-image_orleans.css');
+@import url('./_sands/grid__photos-image_sands.css');
+@import url('./_seattle/grid__photos-image_seattle.css');
+@import url('./_sequoia/grid__photos-image_sequoia.css');
+
+.grid__photos-image {
+    width: 282px;
+    height: 282px;
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-radius: 10px 10px 0 0;
+    position: relative;
+}

@@ -1,0 +1,6 @@
+.grid__photos-image_seattle {
+    background-image: url('../../../../images/Seattle.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position-y: bottom;
+}

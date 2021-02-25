@@ -1,0 +1,13 @@
+.modal__background_tooltip {
+    align-content: space-between;
+    text-align: center;
+    color: black;
+    padding: 26px 36px;
+    align-items: center;
+    z-index: 3;
+    position: absolute;
+}
+
+.modal__form_tooltip {
+    z-index: 3;
+}

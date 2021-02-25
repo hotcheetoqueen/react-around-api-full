@@ -1,0 +1,35 @@
+@import url('./__background/modal__background.css');
+@import url('./__close/modal__close.css');
+@import url('./__container/modal__container.css');
+@import url('./__fieldset/modal__fieldset.css');
+@import url('./__input/modal__input.css');
+@import url('./__fieldset/modal__fieldset.css');
+@import url('./_photo/modal_photo.css');
+@import url('./__save-btn/modal__save-btn.css');
+@import url('./__title/modal__title.css');
+@import url('./_tooltip/modal_tooltip.css');
+@import url('./_credentials/modal_credentials.css');
+
+ .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    display: none;
+}
+
+.modal_visible {
+    display: flex;
+    background: #000000a8;
+}
+
+@media screen and (max-width: 320px) {
+    .modal {
+        margin: auto;
+        text-align: left;
+    }
+}

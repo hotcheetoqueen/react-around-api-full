@@ -1,0 +1,12 @@
+.modal_photo__image {
+        max-height: 75vh;
+        max-width: 75vw;
+        object-fit: contain;
+    }
+    
+    @media screen and (max-width: 320px) {
+        .modal_photo__image {
+            width: 240px;
+            height: 100%;
+        }
+    }    
