@@ -23,7 +23,8 @@
     "eslint": "^7.9.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
-    "nodemon": "^2.0.4"
+    "nodemon": "^2.0.4",
+    "validator": "^13.5.2"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",

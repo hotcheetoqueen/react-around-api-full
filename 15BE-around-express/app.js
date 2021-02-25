@@ -57,17 +57,16 @@ app.post('/signup', celebrate({
   }),
 }), createUser);
 
-app.use(errors());
-
 app.use(auth);
 
 app.use('/cards', cardsRoute);
 app.use('/users', usersRoute);
 
+app.use(errors());
 app.use(errorLogger);
 
 app.use((err, req, res, next) => {
-  res.status(err.statusCode).send({ message })
+  res.status(err.statusCode).send({ message: err.message })
 })
 
 
