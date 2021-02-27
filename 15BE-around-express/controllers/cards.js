@@ -60,8 +60,8 @@ module.exports.likeCard = (req, res, next) => {
       }
       return Card.findByIdAndUpdate(card._id,
         { $addToSet: { likes: user } }, { new: true, runValidators: true })
-        .then((card) => {
-          res.send({ data: card });
+        .then((data) => {
+          res.send({ data });
         });
     })
     .catch(next);
