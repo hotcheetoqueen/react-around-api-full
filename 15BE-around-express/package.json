@@ -23,8 +23,7 @@
     "eslint": "^7.9.0",
     "eslint-config-airbnb-base": "^14.2.0",
     "eslint-plugin-import": "^2.22.0",
-    "nodemon": "^2.0.4",
-    "validator": "^13.5.2"
+    "nodemon": "^2.0.4"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
@@ -34,6 +33,7 @@
     "express-winston": "^4.0.5",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.10.5",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "validator": "^13.5.2"
   }
 }

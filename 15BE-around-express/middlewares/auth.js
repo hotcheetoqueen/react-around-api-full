@@ -11,10 +11,7 @@ module.exports = (req, res, next) => {
   const { authorization } = req.headers;
   const token = authorization.replace('Bearer ', '');
 
-  console.log('authorization', authorization);
-
   if (!token) {
-    console.log('No token!');
     throw new AuthError('Authorization Required');
   }
 

@@ -20,11 +20,10 @@ module.exports.getCards = (req, res, next) => {
 
 module.exports.postCard = (req, res, next) => {
   const { name, link } = req.body;
-  console.log(req.user);
+
   Card.create({ name, link, owner: req.user.id })
     .then((card) => res.send({ data: card }))
     .catch((err) => {
-      console.log('Error ', err);
       if (err.name === 'ValidationError') {
         throw new RequestError('Unable to create card');
       }
@@ -68,7 +67,7 @@ module.exports.likeCard = (req, res, next) => {
     .catch(next);
 };
 
-module.exports.unlikeCard = (req, res, next) => {
+module.exports.unlikeCard = (req, res) => {
   const user = req.user.id;
 
   Card.findByIdAndUpdate(req.params.cardId,

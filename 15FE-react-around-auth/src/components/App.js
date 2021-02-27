@@ -228,10 +228,10 @@ function App(props) {
               history.push('/home');
             } else {
                 resetForm();
-                if (data.err == 401){
+                if (data.err === 401){
                   throw new Error('Uh oh, something is off with those credentials!');
                 }
-                if (data.err == 403){
+                if (data.err === 403){
                     throw new Error('We cannot seem to find that user -- are you sure they exist?')
                 }
           }

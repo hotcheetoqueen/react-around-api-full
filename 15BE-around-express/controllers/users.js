@@ -1,18 +1,16 @@
-const User = require('../models/user');
-const bcrypt = require('bcrypt');
-const SALT_ROUND = 10;
 const jwt = require('jsonwebtoken');
-const { generateJWT } = require('../utils/jwt');
-
+const bcrypt = require('bcrypt');
+const User = require('../models/user');
 const { isAuthorized } = require('../utils/jwt');
+
+// const SALT_ROUND = 10;
+// const { generateJWT } = require('../utils/jwt');
 
 const AuthError = require('../errors/AuthError');
 const NotFoundError = require('../errors/NotFoundError');
 const RequestError = require('../errors/RequestError');
-const ServerError = require('../errors/ServerError');
 
 // dotenv.config();
-
 // const { NODE_ENV, JWT_SECRET } = process.env;
 
 module.exports.getAllUsers = (req, res, next) => {
@@ -21,11 +19,12 @@ module.exports.getAllUsers = (req, res, next) => {
   User.find({ }).select('+password')
     .then((users) => res.send({ data: users }))
     .catch(next);
+
+  return res.status(200);
 };
 
 module.exports.getProfile = (req, res, next) => {
   if (isAuthorized(req.headers.authorization)) return res.status(401);
-
 
   User.findById(req.params.id).select('+password')
     .then((user) => {
@@ -40,48 +39,49 @@ module.exports.getProfile = (req, res, next) => {
       next(err);
     })
     .catch(next);
+
+  return res.status(200);
 };
 
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user.id)
-    .then(user => {
+    .then((user) => {
       if (!user) {
-        throw new NotFoundError('User not found')
+        throw new NotFoundError('User not found');
       }
-      res.send(user)
+      res.send(user);
     })
-    .catch(next)
+    .catch(next);
 };
 
 module.exports.createUser = (req, res, next) => {
-  const { name, about, avatar, email, password } = req.body;
+  const {
+    name, about, avatar, email, password,
+  } = req.body;
 
-  return bcrypt.hash(password, 10, (error, hash) => {
-    return User.create({ name, about, avatar, email, password: hash })
-        .then((user) => {
-          return res.status(200).send({
-            message: `User ${email} successfully created!`,
-            data: {
-              _id: user._id
-            }
-          });
-        })
-        .catch((err) => {
-          if (err.name === 'ValidationError' || err.name === 'MongoError') {
-            throw new RequestError('User cannot be created because of an issue with the credentials');
-          }
-          next(err);
-      })
-    .catch(next);
-
-  });
+  return bcrypt.hash(password, 10, (error, hash) => User.create({
+    name, about, avatar, email, password: hash,
+  })
+    .then((user) => res.status(200).send({
+      message: `User ${email} successfully created!`,
+      data: {
+        _id: user._id,
+      },
+    }))
+    .catch((err) => {
+      if (err.name === 'ValidationError' || err.name === 'MongoError') {
+        throw new RequestError('User cannot be created because of an issue with the credentials');
+      }
+      next(err);
+    })
+    .catch(next));
 };
 
 module.exports.updateUser = (req, res, next) => {
   const { name, about } = req.body;
   User.findByIdAndUpdate(req.user.id, { name, about }, { new: true, runValidators: true })
     .then((user) => {
-      res.send({ data: user })
+      res.send({ data: user });
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -105,9 +105,7 @@ module.exports.updateAvatar = (req, res, next) => {
     .catch(next);
 };
 
-const getJwtToken = (id) => {
-  return jwt.sign({ id }, 'secret');
-}
+const getJwtToken = (id) => jwt.sign({ id }, 'secret');
 
 module.exports.login = (req, res, next) => {
   const { email, password } = req.body;
@@ -123,7 +121,6 @@ module.exports.login = (req, res, next) => {
       }
 
       return bcrypt.compare(password, user.password, (error, isPasswordValid) => {
-
         if (!isPasswordValid) {
           throw new AuthError('Uh oh, something is wrong with those credentials!');
         }
@@ -132,11 +129,11 @@ module.exports.login = (req, res, next) => {
 
         res.cookie('jwt', token, {
           maxAge: 3600000 * 24 * 7,
-          httpOnly: true
-        })
+          httpOnly: true,
+        });
 
         return res.status(200).send({ token });
       });
     })
-  .catch(next);
-}
+    .catch(next);
+};

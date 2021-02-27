@@ -10,7 +10,7 @@ export default function Card(props) {
         `grid__photos-delete ${isOwn ? 'grid__photos-delete' : 'grid__photos-delete_hidden'}`
     );
 
-    const isLiked = currentUser && props.card.likes.some(i => i._id == currentUser._id);
+    const isLiked = currentUser && props.card.likes.some(i => i._id === currentUser._id);
 
     const cardLikeButtonClassName = (
         `grid__photos-liker ${isLiked && 'grid__photos-liker_on'}`

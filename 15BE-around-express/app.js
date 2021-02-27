@@ -35,7 +35,7 @@ app.use(requestLogger);
 
 app.get('/crash-test', () => {
   setTimeout(() => {
-    throw new Error('Server will crash now');
+    throw new ServerError('Server will crash now');
   }, 0);
 });
 
@@ -64,7 +64,7 @@ app.use('/users', usersRoute);
 app.use(errors());
 app.use(errorLogger);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   res.status(err.statusCode).send({ message: err.message });
 });
 
