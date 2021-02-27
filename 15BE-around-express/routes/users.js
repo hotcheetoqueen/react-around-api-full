@@ -1,7 +1,7 @@
 const router = require('express').Router();
-const users = require('../controllers/users');
 const { celebrate, Joi } = require('celebrate');
 const validator = require('validator');
+const users = require('../controllers/users');
 
 router.get('/', celebrate({
   headers: Joi.object().keys({
@@ -17,7 +17,7 @@ router.get('/me', celebrate({
   }).options({ allowUnknown: true }),
 }), (req, res) => {
   users.getCurrentUser(req, res);
-})
+});
 
 router.patch('/me', celebrate({
   headers: Joi.object().keys({
@@ -33,13 +33,11 @@ router.patch('/me', celebrate({
 
 router.patch('/me/avatar', celebrate({
   body: Joi.object().keys({
-    avatar: Joi.string().required().custom((value, helpers) => 
-    validator.isURL(value) ? value : helpers.message('Url should be valid.')
-    )
-    .messages({
-      'any.required': 'You must include a valid image address.'
-    })
-  })
+    avatar: Joi.string().required().custom((value, helpers) => (validator.isURL(value) ? value : helpers.message('Url should be valid.')))
+      .messages({
+        'any.required': 'You must include a valid image address.',
+      }),
+  }),
 }), users.updateAvatar);
 
 router.get('/:id', celebrate({

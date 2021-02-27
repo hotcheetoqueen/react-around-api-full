@@ -1,11 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const { requestLogger, errorLogger } = require('./middlewares/logger');
 const cors = require('cors');
+const { celebrate, Joi, errors } = require('celebrate');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const auth = require('./middlewares/auth');
 const { login, createUser } = require('./controllers/users');
-const { celebrate, Joi, errors } = require('celebrate');
 
 // require('dotenv').config();
 // console.log(process.env.NODE_ENV);
@@ -32,7 +32,6 @@ app.use(express.json({ extended: true }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(requestLogger);
-
 
 app.get('/crash-test', () => {
   setTimeout(() => {
@@ -66,9 +65,8 @@ app.use(errors());
 app.use(errorLogger);
 
 app.use((err, req, res, next) => {
-  res.status(err.statusCode).send({ message: err.message })
-})
-
+  res.status(err.statusCode).send({ message: err.message });
+});
 
 app.get('*', (req, res) => {
   res.status(404).send({ message: 'Requested resource not found' });
