@@ -1,5 +1,6 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate');
+const validator = require('validator');
 const cards = require('../controllers/cards');
 
 router.get('/', (req, res) => {
@@ -12,10 +13,12 @@ router.post('/', celebrate({
   }).options({ allowUnknown: true }),
   body: Joi.object().keys({
     name: Joi.string().required().min(2).max(30),
-    link: Joi.string().required().uri({ scheme: ['http', 'https'] }),
-    // link: Joi.string().required().custom((value, helpers) =>
-    //   validator.isURL(value) ? value : helpers.message('Url should be valid.')
-    // ).messages({ 'any.required' : 'You must include a valid image address.' }),
+    // link: Joi.string().required().uri({ scheme: ['http', 'https'] }),
+    link: Joi.string().required().custom((value, helpers) =>
+      (validator.isURL(value) ? value : helpers.message('Url should be valid.'))
+    ).messages({ 
+      'any.required' : 'You must include a valid image address.',
+    }),
     likes: Joi.array().items(Joi.string()),
   }),
 }), (req, res) => {
