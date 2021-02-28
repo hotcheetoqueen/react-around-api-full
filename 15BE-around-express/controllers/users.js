@@ -69,8 +69,8 @@ module.exports.createUser = (req, res, next) => {
       },
     }))
     .catch((err) => {
-      if (err.name === 'ValidationError' || err.name === 'MongoError') {
-        throw new RequestError('User cannot be created because of an issue with the credentials');
+      if (err.name === 'MongoError' && err.code === 11000) {
+        res.status(409).json({ message: 'User already exists.' });
       }
       next(err);
     })
